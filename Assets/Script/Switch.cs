@@ -2,17 +2,19 @@
 using System.Collections;
 
 public class Switch : MonoBehaviour {
-    public GameObject _Wall;
+	public bool isOn;
     private int flag;
     public bool UsualIsOn;
 	public int cubecolor;
 	void OnTriggerStay(Collider other)
     {
+		if(int.Parse(other.transform.parent.parent.name) == cubecolor){
 		//if (other.CompareTag("Cube")) {
 			flag = 5;
 			transform.parent.GetComponent<Renderer>().material.color = Color.red;
-			_Wall.GetComponent<Wall>().isOn = !UsualIsOn;
+			isOn = !UsualIsOn;
 		//}
+		}
         
     }
     
@@ -21,7 +23,7 @@ public class Switch : MonoBehaviour {
     void Start () {
         flag = 0;
 		transform.parent.GetComponent<Renderer>().material.color = Color.white;
-        _Wall.GetComponent<Wall>().isOn = UsualIsOn;
+        isOn = UsualIsOn;
 	}
 	
 	// Update is called once per frame
@@ -29,7 +31,7 @@ public class Switch : MonoBehaviour {
         if (flag <= 0)
         {
 			transform.parent.GetComponent<Renderer>().material.color = Color.white;
-            _Wall.GetComponent<Wall>().isOn = UsualIsOn;
+            isOn = UsualIsOn;
         }else
         {
             flag--;

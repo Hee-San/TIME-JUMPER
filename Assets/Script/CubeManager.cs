@@ -43,7 +43,8 @@ public class CubeManager : MonoBehaviour {
             Quaternion rot = fspt.rot; 
             int time = fspt.SpawnTime;
             int timer = 0;
-            GameObject CubeListObjectC = new GameObject(id.ToString());
+            GameObject CubeListObjectC = new GameObject();
+			CubeListObjectC.name = id.ToString ();
             CubeListObjectC.transform.parent = CubeListObject.transform;
 
             for (int i = time; i <= 3; i ++)
@@ -82,9 +83,7 @@ public class CubeManager : MonoBehaviour {
         if (nowTime != wasTime) {
             foreach(Cube C in CubeList.FindAll(c => c.isDraged))
             {
-                //CubeUpdateDel(C);
                 C.spTime = nowTime;
-                //CubeUpdateSpwn(C);
             }
             foreach (Cube C in CubeList.FindAll(c => c.isOn && c.spTime != nowTime && !c.isDraged))
             {
@@ -103,28 +102,28 @@ public class CubeManager : MonoBehaviour {
             foreach (Cube C in CubeList.FindAll(c => !c.isOn && c.spTime == nowTime))
             {
                 C.isOn = true;
-                spawn(C);
+            	spawn(C);
             }
         }
         wasTime = nowTime;
+		Destroy(GameObject.Find("fake"));
     }
 
     void spawn(Cube data)
-    {
-		GameObject _Cube = new GameObject();
+	{
+		GameObject c = new GameObject("fake");
 		switch(data.id){
 		case 1:
-			 _Cube = _Cube1;
+			c = Instantiate(_Cube1) as GameObject;
 			break;
 		case 2:
-			 _Cube = _Cube2;
+			c = Instantiate(_Cube2) as GameObject;
 			break;
 		case 3:
-			 _Cube = _Cube2;
+			c = Instantiate(_Cube3) as GameObject;
 			break;
 		}
 			
-		GameObject c = Instantiate(_Cube) as GameObject;
 
         c.name = data.timer.ToString();
         string id = data.id.ToString();
@@ -133,16 +132,15 @@ public class CubeManager : MonoBehaviour {
         c.GetComponent<Transform>().position = data.pos;
         c.GetComponent<Transform>().rotation = data.rot;
         //c.AddComponent<BoxCollider>();
-        c.AddComponent<Rigidbody>();
-        c.GetComponent<Rigidbody>().mass = mass;
+		c.GetComponent<Rigidbody>().mass = mass;
         //c.GetComponent<Rigidbody>().useGravity = false;
-
     }
+
     PosAndRot del(Cube data)
     {
         string id = data.id.ToString();
         string timer = data.timer.ToString();
-        print(timer);
+        //print(timer);
         GameObject c = CubeListObject.transform.FindChild(id).FindChild(timer).gameObject;
         PosAndRot pr = new PosAndRot();
         pr.pos = c.GetComponent<Transform>().position;
@@ -151,6 +149,7 @@ public class CubeManager : MonoBehaviour {
 
         return pr;
     } //CubeのGameObjectを消す
+
     public Cube checkdata(GameObject C)
     {
         int timer = int.Parse(C.name);

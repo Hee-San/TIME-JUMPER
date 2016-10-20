@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class TimeKeeper : MonoBehaviour {
     public int StartTime;    //開始時刻をInspectorで登録
     public GameObject PlayerCamera;
+	public Material sky1, sky2, sky3;
     [HideInInspector]
     public int time;
     public Text timeTxt;
@@ -17,7 +18,8 @@ public class TimeKeeper : MonoBehaviour {
     void Start () {
         time = StartTime;
         Check = true;
-}
+		skyUpdate (time);
+	}
 
     //ゲーム中1フレームごとに呼び出し
     void Update () {
@@ -25,10 +27,12 @@ public class TimeKeeper : MonoBehaviour {
         {
             Check = true;
             time ++;
+			skyUpdate (time);
         }else if (Input.GetButtonDown("-Time") && canJump() && time != 1)
         {
             Check = true;
-            time --;
+			time --;
+			skyUpdate (time);
         }else{
             Check = false;
         }
@@ -61,4 +65,17 @@ public class TimeKeeper : MonoBehaviour {
         return true;
     }
 
+	void skyUpdate(int time){
+		switch (time) {
+		case 1:
+			PlayerCamera.GetComponent<Skybox> ().material = sky1;
+			break;
+		case 2:
+			PlayerCamera.GetComponent<Skybox> ().material = sky2;
+			break;
+		case 3:
+			PlayerCamera.GetComponent<Skybox> ().material = sky3;
+			break;
+		}
+	}
 }
